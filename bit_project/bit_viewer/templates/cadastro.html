@@ -1,0 +1,7 @@
+<h2>{{ view.object.pk|yesno:"Edit User,Create User" }}</h2>
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">
+    {{ view.object.pk|yesno:"Save Changes,Register" }}
+  </button>
+</form>
