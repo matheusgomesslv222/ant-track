@@ -1,6 +1,5 @@
-###API do Ant Tracker
-
-###Para Conseguir Usar o projeto no seu pc vc deve seguir as seguintes instruções
+API do Ant Tracker
+Para Conseguir Usar o projeto no seu pc vc deve seguir as seguintes instruções
 
 ### 1 - Instalação
   #### vc deve ter o python instalado no seu pc 
