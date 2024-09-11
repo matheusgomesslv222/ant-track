@@ -62,3 +62,38 @@ def userAuth(request):
             return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
         return Response({'message': 'User authenticated successfully'}, status=status.HTTP_200_OK)
+    
+@api_view(['PUT'])
+def userUpdate(request):
+    if request.method == 'PUT':
+        nome = request.data.get('nome')
+        senha = request.data.get('senha')
+        email = request.data.get('email')
+        data_nascimento = request.data.get('data_nascimento')
+
+        try:
+            usuario = UsuarioInfo.objects.get(nome=nome)
+        except UsuarioInfo.DoesNotExist:
+            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        usuario.senha = senha
+        usuario.email = email
+        usuario.data_nascimento = data_nascimento
+
+        usuario.save()
+
+        return Response({'message': 'User updated successfully'}, status=status.HTTP_200_OK)
+    
+@api_view(['DELETE'])
+def deleteUser(request):
+    if request.method == 'DELETE':
+        id = request.data.get('id')
+
+        try:
+            usuario = UsuarioInfo.objects.get(id=id)
+        except UsuarioInfo.DoesNotExist:
+            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        usuario.delete()
+
+        return Response({'message': 'User deleted successfully'}, status=status.HTTP_200_OK)
