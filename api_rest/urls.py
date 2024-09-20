@@ -10,4 +10,6 @@ urlpatterns = [
     path('authUser/', views.userAuth, name='authUser'),
     path('userUpdate/', views.userUpdate, name='userUpdate'),
     path('deleteUser/', views.deleteUser, name='deleteUser'),
+    
+    #urls para maquina
 ]
