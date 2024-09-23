@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'api_rest',
+    'firebase_admin',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,4 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOW_ORIGINS = [
 #     'http://localhost:8000',
 # ]
+

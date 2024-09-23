@@ -21,27 +21,36 @@ class UsuarioInfo(models.Model):
         usuario.save()
 
 class Maquina(models.Model):
-    nome_maquina = models.CharField(max_length=100)
-    id_usuario = models.ForeignKey(UsuarioInfo, on_delete=models.CASCADE)
+    miner_status = models.CharField(max_length=100)
+    #id_usuario = models.ForeignKey(UsuarioInfo, on_delete=models.CASCADE)
     tera_hash = models.DecimalField(max_digits=10, decimal_places=2)
-    temperatura = models.IntegerField()
+    chip_temperature_min = models.IntegerField()
+    chip_temperature_max = models.IntegerField()
+    cooling = models.IntegerField()
     rate = models.DecimalField(max_digits=10, decimal_places=2)
-    pool = models.ForeignKey('Pool', on_delete=models.CASCADE, null=True, blank=True, related_name='maquinas')
-    
-    def new_register_maquina(self, id_usuario, nome_maquina, tera_hash, temperatura, rate, pool):
-        maquina = Maquina(id_usuario=id_usuario, nome_maquina=nome_maquina, tera_hash=tera_hash, temperatura=temperatura, rate=rate, pool=pool)
-        maquina.save()
-    
-    def alterar_nome_maquina(self,id_maquina,nome_maquina):
-        maquina = Maquina.objects.get(id=id_maquina)
-        maquina.nome_maquina = nome_maquina
-        maquina.save()
+    pcb_temperature_min = models.IntegerField()
+    pcb_temperature_max = models.IntegerField()
+    power_consumption = models.IntegerField()
+    power_efficiency = models.DecimalField(max_digits=10, decimal_places=2)
+    power_usage = models.IntegerField()
+   
     
 
 class Pool(models.Model):
-    nome = models.CharField(max_length=100)
-    id_maquina = models.ForeignKey(Maquina, on_delete=models.CASCADE, related_name='pools')
     id_usuario = models.ForeignKey(UsuarioInfo, on_delete=models.CASCADE)
+    accepted = models.IntegerField()
+    asic_boost = models.BooleanField()
+    diff = models.CharField(max_length=100)
+    diffa = models.IntegerField()
+    ls_diff = models.IntegerField()
+    ls_time = models.CharField(max_length=100)
+    ping = models.IntegerField()
+    pool_type = models.CharField(max_length=100)
+    rejected = models.IntegerField()
+    stale = models.IntegerField()
+    status = models.CharField(max_length=100)
+    url = models.CharField(max_length=200)
+    user = models.CharField(max_length=100)
     
 class Historico(models.Model):
     data = models.DateField()
