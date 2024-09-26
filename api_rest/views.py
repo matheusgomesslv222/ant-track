@@ -174,3 +174,33 @@ def deleteUser(request):
         usuario.delete()
 
         return Response({'message': 'User deleted successfully'}, status=status.HTTP_200_OK)
+    
+    
+@api_view(['GET'])
+def getMediaChip(request):
+    if request.method == 'GET':
+        try:
+            media = Maquina.calcular_media_temperaturas_chip()
+            return Response({'media': media}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def getMediaPCB(request):
+    if request.method == 'GET':
+        try:
+            media = Maquina.calcular_media_temperaturas_pcb()
+            return Response({'media': media}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+@api_view(['GET'])
+def getMediaPower(request):
+    if request.method == 'GET':
+        try:
+            media = Maquina.calcular_media_consumo_energia()
+            return Response({'media': media}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    

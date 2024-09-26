@@ -15,4 +15,7 @@ urlpatterns = [
     
     # URL para atualizar os dados
     path('getData/', views.get_data, name='getData'),
+    path('getMediaChip/', views.getMediaChip, name='getMediaChip'),
+    path('getMediaPCB/', views.getMediaPCB, name='getMediaPCB'),
+    path('getMediaPower/', views.getMediaPower, name='getMediaPower'),
 ]

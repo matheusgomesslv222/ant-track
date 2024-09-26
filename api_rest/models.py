@@ -33,6 +33,28 @@ class Maquina(models.Model):
     power_consumption = models.IntegerField()
     power_efficiency = models.DecimalField(max_digits=10, decimal_places=2)
     power_usage = models.IntegerField()
+    
+    @staticmethod
+    def calcular_media_temperaturas_chip():
+        temperaturas = Maquina.objects.aggregate(
+            avg_temp_min=models.Avg('chip_temperature_min'),
+            avg_temp_max=models.Avg('chip_temperature_max')
+        )
+        return (temperaturas['avg_temp_min'] + temperaturas['avg_temp_max']) / 2
+    
+    @staticmethod
+    def calcular_media_temperaturas_pcb():
+        temperaturas = Maquina.objects.aggregate(
+            avg_temp_min=models.Avg('pcb_temperature_min'),
+            avg_temp_max=models.Avg('pcb_temperature_max')
+        )
+        return (temperaturas['avg_temp_min'] + temperaturas['avg_temp_max']) / 2
+    
+    @staticmethod
+    def calcular_media_consumo_energia():
+        return Maquina.objects.aggregate(
+            avg_power_consumption=models.Avg('power_consumption')
+        )['avg_power_consumption']
    
     
 
