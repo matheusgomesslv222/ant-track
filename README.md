@@ -20,3 +20,20 @@ Siga os passos abaixo para configurar o projeto localmente:
    ```bash
    git clone https://github.com/seu-repositorio/ant-tracker.git
    cd ant-tracker
+   
+2. **Crie um ambiente virtual**
+
+   Na raiz do projeto, crie e ative um ambiente virtual:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # No Windows: venv\Scripts\activate
+
+3 **Com o ambiente virtual ativo, instale as dependências do projeto: 
+   pip install -r requirements.txt
+
+4 Execute o projeto
+
+   python manage.py runserver
+   
+
