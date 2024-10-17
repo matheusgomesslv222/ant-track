@@ -22,7 +22,6 @@ class UsuarioInfo(models.Model):
 
 class Maquina(models.Model):
     miner_status = models.CharField(max_length=100)
-    #id_usuario = models.ForeignKey(UsuarioInfo, on_delete=models.CASCADE)
     tera_hash = models.DecimalField(max_digits=10, decimal_places=2)
     chip_temperature_min = models.IntegerField()
     chip_temperature_max = models.IntegerField()
@@ -33,6 +32,7 @@ class Maquina(models.Model):
     power_consumption = models.IntegerField()
     power_efficiency = models.DecimalField(max_digits=10, decimal_places=2)
     power_usage = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
     
     @staticmethod
     def calcular_media_temperaturas_chip():
@@ -55,6 +55,12 @@ class Maquina(models.Model):
         return Maquina.objects.aggregate(
             avg_power_consumption=models.Avg('power_consumption')
         )['avg_power_consumption']
+        
+    @staticmethod
+    def calcular_media_rate():
+        return Maquina.objects.aggregate(
+            avg_rate=models.Avg('rate')
+        )['avg_rate']
    
     
 

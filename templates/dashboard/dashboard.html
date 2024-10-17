@@ -1,0 +1,277 @@
+
+{% extends "base.html" %}
+{% block 'titulo' %} Dashboard {%endblock %}
+
+{% block 'content'%}
+
+<style>
+  h4 {
+    color: #BBDEFB;
+  }
+  /* Estilos personalizados para a tabela DataTables */
+  .dataTables_wrapper {
+    color: #ECEFF1;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #ECEFF1 !important;
+  }
+  .dataTables_wrapper .dataTables_filter label {
+    color: #ECEFF1;
+  }
+  .dataTables_wrapper .dataTables_filter input {
+    background-color: #333;
+    color: #ECEFF1;
+  }
+  .dataTables_wrapper .dataTables_length label {
+    color: #ECEFF1;
+  }
+  .dataTables_wrapper .dataTables_length select {
+    background-color: #333;
+    color: #ECEFF1;
+  }
+  .dataTables_wrapper .dataTables_info {
+    color: #ECEFF1;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+  .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+  .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    color: #ECEFF1 !important;
+  }
+  table.dataTable {
+    background-color: #1E1E1E;
+    color: #ECEFF1;
+  }
+  table.dataTable thead {
+    background-color: #333;
+  }
+  table.dataTable thead th {
+    color: #ECEFF1;
+  }
+  table.dataTable tbody tr {
+    background-color: #1E1E1E;
+  }
+  table.dataTable tbody tr:hover {
+    background-color: #333;
+  }
+
+  /* Adiciona espaçamento entre a barra de pesquisa e a tabela */
+  .dataTables_wrapper .dataTables_filter {
+    margin-bottom: 20px;
+  }
+  /* Adiciona espaçamento entre o número de entradas e a tabela */
+  .dataTables_wrapper .dataTables_length {
+    margin-bottom: 20px;
+  }
+
+  /* Layout responsivo para dispositivos móveis */
+  @media (max-width: 768px) {
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_length {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .dataTables_wrapper .dataTables_filter label,
+    .dataTables_wrapper .dataTables_length label {
+      margin-bottom: 10px;
+    }
+  }
+</style>
+
+<div class="container pt-3">
+    <div class="card" style="background-color:rgba(217, 217, 217, 0.2);">
+        <h4 class="px-2 mt-2" style="font-size:2rem">Estatisticas</h4>
+        <div class="card" style="background-color: transparent; border: none">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6 col-lg-2 mb-3">
+                  <div class="content-card p-3" style="height: 100px; background-color:#3C3F41; border-radius: 12px;">
+                    <h5 class="" style="font-size: 1rem; color: #9E9E9E">Média Hashrate</h5>
+                    <div class="d-flex column justify-content-end m-3">
+                      <p><span style="color:#64B5F6">{{hashrates}}</span></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 col-lg-2 mb-3">
+                  <div class="content-card p-3" style="height: 100px; background-color:#3C3F41; border-radius: 12px;">
+                    <h5 class="" style="font-size: 1rem; color: #9E9E9E">Média Temperatura</h5>
+                    <div class="d-flex column justify-content-end mt-3" style="font-size: .9rem">
+                      <p style="color:#B0BEC5;" class=" mx-2">CHIP : <span style="color:#64B5F6">{{chip_temperatures}}</span></p>
+                      <p style="color:#B0BEC5;" class="">PCB : <span style="color:#64B5F6">{{pcb_temperatures}}</span></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 col-lg-2 mb-3">
+                  <div class="content-card p-3" style="height: 100px; background-color:#3C3F41; border-radius: 12px;">
+                    <!-- Additional content can go here -->
+                  </div>
+                </div>
+                <div class="col-6 col-lg-2 mb-3">
+                  <div class="content-card p-3" style="height: 100px; background-color:#3C3F41; border-radius: 12px;">
+                    <!-- Additional content can go here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>
+  </div>
+
+
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="card p-3" style="background-color:rgba(217, 217, 217, 0.2);">
+        <h4 class="mb-3" style="font-size: 1rem">Bitcoin Hoje</h4>
+        <div style="overflow-x: auto;">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row mt-3">
+    <!-- Gráfico de Hashrate -->
+    <div class="col-12 col-lg-6 mb-3">
+      <div class="card px-2" style="background-color:rgba(217, 217, 217, 0.2);">
+        <h4 class="mt-2" style="font-size: 2rem">Gráfico de Hashrate</h4>
+        <canvas id="hashrateChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Gráfico de Temperaturas -->
+    <div class="col-12 col-lg-6 mb-3">
+      <div class="card px-2" style="background-color:rgba(217, 217, 217, 0.2);">
+        <h4 class=" mt-2" style="font-size: 2rem">Gráfico de Temperaturas</h4>
+        <canvas id="temperatureChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-3 px-2" style="background-color:rgba(217, 217, 217, 0.2);">
+    <h4 class="mt-2" style="font-size: 2rem">Histórico de Dados</h4>
+    <div class="card" style="background-color: transparent; border: none;">
+      <div class="table-responsive">
+        <table id="historico-maquina" class="text-light table-bordered w-100" style="background-color: #1E1E1E;">
+
+          <thead style="background-color:#2A2D34;">
+            <tr>
+              <th style="color:#ECEFF1;" class="p-3" scope="col">Status</th>
+              <th style="color:#ECEFF1;" class="p-3" scope="col">Hashrate</th>
+              <th style="color:#ECEFF1;" class="p-3" scope="col">Temperature Min/Max</th>
+              <th style="color:#ECEFF1;" class="p-3" scope="col">Cooling</th>
+              <th style="color:#ECEFF1;" class="p-3" scope="col">Consumption</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for maquina in maquinas %}
+            <tr>
+              <td class="p-2">{{ maquina.miner_status }}</td>
+              <td class="p-2">{{ maquina.rate }}</td>
+              <td class="p-2">{{ maquina.chip_temperature_min }} - {{ maquina.chip_temperature_max }}</td>
+              <td class="p-2">{{ maquina.cooling }}</td>
+              <td class="p-2">{{ maquina.power_consumption }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+      // Dados para o gráfico de Hashrate
+      const hashrateLabels = {{ labels|safe }};
+      const hashrateData = {{ hashrates|safe }};
+      
+      const hashrateCtx = document.getElementById('hashrateChart').getContext('2d');
+      const hashrateChart = new Chart(hashrateCtx, {
+          type: 'line',
+          data: {
+              labels: hashrateLabels,
+              datasets: [{
+                  label: 'Hashrate',
+                  data: hashrateData,
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  fill: true,
+              }]
+          },
+          options: {
+              responsive: true,
+              scales: {
+                  x: {
+                      display: true,
+                      title: {
+                          display: true,
+                          text: 'Máquinas'
+                      }
+                  },
+                  y: {
+                      display: true,
+                      title: {
+                          display: true,
+                          text: 'Hashrate'
+                      }
+                  }
+              }
+          }
+      });
+
+      // Dados para o gráfico de Temperaturas
+      const temperatureLabels = {{ labels|safe }};
+      const temperatureMinData = {{ temperatures_min|safe }};
+      const temperatureMaxData = {{ temperatures_max|safe }};
+      
+      const temperatureCtx = document.getElementById('temperatureChart').getContext('2d');
+      const temperatureChart = new Chart(temperatureCtx, {
+          type: 'line',
+          data: {
+              labels: temperatureLabels,
+              datasets: [
+                  {
+                      label: 'Temperatura Mínima',
+                      data: temperatureMinData,
+                      borderColor: 'rgba(255, 99, 132, 1)',
+                      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                      fill: true,
+                  },
+                  {
+                      label: 'Temperatura Máxima',
+                      data: temperatureMaxData,
+                      borderColor: 'rgba(54, 162, 235, 1)',
+                      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                      fill: true,
+                  }
+              ]
+          },
+          options: {
+              responsive: true,
+              scales: {
+                  x: {
+                      display: true,
+                      title: {
+                          display: true,
+                          text: 'Máquinas'
+                      }
+                  },
+                  y: {
+                      display: true,
+                      title: {
+                          display: true,
+                          text: 'Temperatura'
+                      }
+                  }
+              }
+          }
+      });
+
+      $(document).ready( function () {
+          $('#historico-maquina').DataTable();
+      });
+  </script>
+
+
+    
+</div>
+
+{% endblock %}

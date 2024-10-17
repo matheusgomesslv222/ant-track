@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse
 
 from rest_framework.decorators import api_view
@@ -130,16 +130,20 @@ def createUser(request):
 @api_view(['POST'])
 def userAuth(request):
     if request.method == 'POST':
-        nome = request.data.get('nome')
-        senha = request.data.get('senha')
+        email = request.POST.get('email')
+        senha = request.POST.get('password')
 
         try:
-            usuario = UsuarioInfo.objects.get(nome=nome, senha=senha)
+            usuario = UsuarioInfo.objects.get(email=email)
+            if usuario.senha != senha:
+                return HttpResponse('Invalid credentials', status=401)
         except UsuarioInfo.DoesNotExist:
-            return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            return HttpResponse('User not found', status=404)
 
-        return Response({'message': 'User authenticated successfully'}, status=status.HTTP_200_OK)
-    
+        # If the user is authenticated, redirect to the index view of the dashboard app
+        return redirect('dashboard')
+        
+
 @api_view(['PUT'])
 def userUpdate(request):
     if request.method == 'PUT':

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'api_rest',
     'firebase_admin',
+    'usuarios',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +62,7 @@ ROOT_URLCONF = 'ant_tracker_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,4 +135,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOW_ORIGINS = [
 #     'http://localhost:8000',
 # ]
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'e1e2-2804-868-d052-8579-297f-9335-170-91b3.ngrok-free.app',
+    # Adicione outros hosts permitidos aqui
+]
 
